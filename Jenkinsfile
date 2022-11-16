@@ -7,9 +7,7 @@ pipeline {
     stages{
         stage('build & test'){
             steps{
-                sh 'gradle build'
-                sh 'gradle bootRun &'
-                sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+                sh 'mvn clean install -e'
             }
         }
 
@@ -24,16 +22,14 @@ pipeline {
             }
         }
 
-        stage('run'){
+        stage('run & Test'){
             steps{
                 echo 'Running...'
-                
+                // sh 'gradle build'
+                // sh 'gradle bootRun &'
+                // sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
             }
         }
-        stage('test'){
-            steps{
-                echo 'Testing...'
-            }
         }
         stage('nexus'){
             steps{
