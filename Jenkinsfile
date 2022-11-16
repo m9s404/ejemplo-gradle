@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools{
         gradle 'grdl'
+        maven 'maven'
     }
 
     stages{
