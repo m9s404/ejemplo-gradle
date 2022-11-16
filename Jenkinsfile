@@ -9,7 +9,7 @@ pipeline {
     }
     parameters{
         choice(name: 'Build_Tool', choices: ['maven', 'gradle'], description: '')
-        booleanParam(name: 'executeTests', defaultValue: true, description: '')
+        booleanParam(name: 'PushToNexus', defaultValue: false, description: '')
 
     }
 
@@ -62,6 +62,11 @@ pipeline {
         }
         
         stage('nexus'){
+            when{
+                expression {
+                    params.PushToNexus
+                }
+            }
             steps{
                 nexusPublisher nexusInstanceId: 'nxs01', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.4']]]
             }
