@@ -1,5 +1,5 @@
-grdl_s = load "gradle.groovy"
-mvn_s = load "maven.groovy"
+def grdl_s = load "gradle.groovy"
+def mvn_s = load "maven.groovy"
 
 pipeline {
     agent any
