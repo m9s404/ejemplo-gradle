@@ -31,7 +31,7 @@ pipeline {
             }
             steps{
                 script{
-                    mvn_s.build_test()
+                    mvn_s.maven_build_test()
                 }
             }
         }
@@ -55,8 +55,8 @@ pipeline {
             }
             steps{
                 script{
-                    grdl_s.run()
-                    grdl_s.test()
+                    grdl_s.gradle_run()
+                    grdl_s.gradle_test()
                 }
             }
         }
