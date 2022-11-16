@@ -1,6 +1,7 @@
 def gradle_run() {
     sh 'gradle build'
     sh 'gradle bootRun &'
+    sh 'sleep 10'
 }
 
 def gradle_test() {

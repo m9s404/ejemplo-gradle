@@ -56,10 +56,8 @@ pipeline {
             steps{
                 script{
                     grdl_s.gradle_run()
-                }
-                script(
                     grdl_s.gradle_test()
-                )
+                }
             }
         }
         
