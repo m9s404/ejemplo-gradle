@@ -27,8 +27,8 @@ pipeline {
             steps{
                 // echo 'Running...'
                 sh '''
-                gradle build
-                gradle bootRun &
+                gradle build;
+                gradle bootRun &;
                 curl -X GET "http://localhost:8081/rest/mscovid/test?msg=testing"
                 '''
             }
