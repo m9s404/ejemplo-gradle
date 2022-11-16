@@ -1,14 +1,29 @@
+grdl_s = load "gradle.groovy"
+mvn_s = load "maven.groovy"
+
 pipeline {
     agent any
     tools{
         gradle 'grdl'
         maven 'maven'
     }
+    parameters{
+        choice(name: 'Build_Tool', choices: ['maven', 'gradle'], description: '')
+        booleanParam(name: 'executeTests', defaultValue: true, description: '')
+
+    }
 
     stages{
         stage('build & test'){
+            when{
+                expression {
+                    params.Build_Tool == 'maven'
+                }
+            }
             steps{
-                sh 'mvn clean install -e'
+                script{
+                    mvn_s.build_test()
+                }
             }
         }
 
@@ -24,21 +39,22 @@ pipeline {
         }
 
         stage('run & Test'){
+            when{
+                expression {
+                    params.Build_Tool == 'gradle'
+                }
+            }
             steps{
-                // echo 'Running...'
-                sh 'gradle build'
-                sh 'gradle bootRun &'
-                sh 'sleep 10'
-                sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+                script{
+                    grdl_s.run()
+                    grdl_s.test()
+                }
             }
         }
         
         stage('nexus'){
             steps{
-                // sh "ls ${WORKSPACE}/build"
-                // nexusPublisher(nexusInstanceId: 'nxs01', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]], tagName: '0.0.3')
-                // nexusPublisher nexusInstanceId: 'nxs01', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]], tagName: '0.0.2'
-                nexusPublisher nexusInstanceId: 'nxs01', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.3']]]
+                nexusPublisher nexusInstanceId: 'nxs01', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.4']]]
             }
         }
     }
