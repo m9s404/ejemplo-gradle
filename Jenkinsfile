@@ -14,7 +14,7 @@ pipeline {
 
         stage('sonar'){
             steps{
-                withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') {
+                withSonarQubeEnv(credentialsId: 'sonar_tkn', installationName: 'sonarserver') {
                 sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar \
                     -Dsonar.target=sonar.java.binaries \
                     -Dsonar.projectKey=ejemplo-gradle \
