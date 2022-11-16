@@ -1,5 +1,5 @@
-def grdl_s = load "gradle.groovy"
-def mvn_s = load "maven.groovy"
+def grdl_s
+def mvn_s
 
 pipeline {
     agent any
@@ -14,6 +14,15 @@ pipeline {
     }
 
     stages{
+        stage("Load Scripts"){
+            steps{
+                script {
+                    mvn_s = load "maven.groovy"
+                    grdl_s = load "gradle.groovy"
+                }
+            }
+
+        }
         stage('build & test'){
             when{
                 expression {
