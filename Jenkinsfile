@@ -26,11 +26,10 @@ pipeline {
         stage('run & Test'){
             steps{
                 // echo 'Running...'
-                sh '''
-                gradle build;
-                gradle bootRun &;
-                curl -X GET "http://localhost:8081/rest/mscovid/test?msg=testing"
-                '''
+                sh 'gradle build'
+                sh 'gradle bootRun &'
+                sh 'sleep 10'
+                sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
             }
         }
         
